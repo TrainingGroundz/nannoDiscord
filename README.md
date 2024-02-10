@@ -5,7 +5,7 @@ Bem-vindo ao **Bot NSFW para Discord!** Este bot foi desenvolvido para adicionar
 ## Funcionalidades Principais
 
 ### Sistema de Economia - "Pikas e VIPs"
-- O bot possui um sistema de economia integrado no MongoDB, com uma moeda denominada "pikas" com diversas funcionalidades
+- O bot possui um sistema de economia integrado no MongoDB, ranks com diversas funcionalidades.
 
 ### VIPs
 - Verifique o saldo de VIPs usando o comando `!vips`.
@@ -37,10 +37,12 @@ Bem-vindo ao **Bot NSFW para Discord!** Este bot foi desenvolvido para adicionar
 
 1. **Economia**
    - `-daily` - Coleta suas "pikas" diárias, recompensa dobrada para cargo especifico.
-   - `-pikas` - Verifica o saldo de "pikas".
-   - `-vips` - Consulta o saldo de VIPs.
+   - `-pikas @membro` - Verifica o saldo de "pikas" de um membro especifico ou do proprio autor do comando.
+   - `-vips @membro` - Consulta o saldo de "VIPs" de um membro especifico ou do proprio autor do comando.
    - `toppikas pagina Ex.: 1, 2, 3` - Exibe o rank com os usuários mais ricos do servidor.
    - `topvip pagina Ex.: 1, 2, 3` - Exibe o rank com os usuários que possuem o maior número de **VIPS** (*Vips* podem ser coletados no jogo de advinhação)
+   - `-pagar @membro quantidade_pikas` - Transfere saldo de **pikas** entre os membros.
+
 
 2. **Moderação**
    - `-mod mute @usuário tempo_em_minutos` - Abre um menu com os motivos já prontos para os moderadores selecionarem, o aviso de mute será enviado para um canal de moderação especifico e também irá notificar o membro na DM. Caso não seja passado o tempo, será adicionado o mute máximo de 28 dias ao membro.
@@ -52,14 +54,20 @@ Bem-vindo ao **Bot NSFW para Discord!** Este bot foi desenvolvido para adicionar
    - `-removermutes @usuário quantidade` - Remove mutes do usuário, verifica saldo e remove se a quantidade for menor que ou igual o saldo atual do membro.
    - `-setup` - Envia o Menu de Atendimento para o canal
    - `removeedp | removevip | addvip | addedp` - Comandos para adicionar e remover cargos.
+
+
 3. **Jogos e Interacão**
    - `-n` - Inicia o jogo de adivinhação. Você terá 7 chances para acertar um número secreto em um intervalo gerado aleatoriamente, dicas serão exibidas conforme você se aproxima ou se afasta do número secreto, todos podem participar do mesmo jogo, porém o ganhador das recompensas será apenas o membro que iniciou o jogo!
    - `-s` - Sequestra um membro, caso o autor do comando satisfaça os requisitos do sequestro (será cobrada uma taxa de `vip` e `pikas`. O membro sequestrado é liberado automaticamente após *5* minutos.
    - `-r mensagem_pra_repetir` - Comando simples para repetir a mensagem do membro, onde a mensagem do bot é apagada logo em seguida, simulando uma conversa.
-
+   - `-av @membro` - Envia uma mensagem exibindo o avatar do membro, caso seja passado o `membro`, se não for passado é exibido o avatar do usuário que invocou o comando.
 
 ## Requisitos
-- Certifique-se de que o bot tenha as permissões necessárias no servidor, os IDS dos cargos e canais estejam de acordo com sua preferência em seu servidor, e o arquivo `.env` esteja preenchido corretamente com seus _tokens_ `MONGO` e `DISCORD`.
+- Certifique-se de que o bot tenha as permissões necessárias no servidor.
+- IDS dos cargos e canais estejam de acordo com sua preferência em seu servidor.
+- O arquivo `.env` esteja preenchido corretamente com seus _tokens_ `MONGO` e `DISCORD`.
+- As bibliotecas necessárias estejam instaladas.
+- Versão Python recomendada `3.11.7`.
 
 ## Contribuições
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests no repositório do bot.
