@@ -1,3 +1,8 @@
+<div style="float: right;">
+
+[![GitHub stars](https://img.shields.io/github/stars/MatheusCoding/nannoDiscord.svg?style=flat-square&logo=github&colorB=white&label=likes&logoWidth=25&logoColor=white)](https://github.com/MatheusCoding/nannoDiscord/stargazers)
+</div>
+
 # Bot Discord NSFW
 
 Bem-vindo ao **Bot NSFW para Discord!** Este bot foi desenvolvido para adicionar uma variedade de funcionalidades e entretenimento para servidores NSFW no Discord. Abaixo, você encontrará informações detalhadas sobre suas principais características e comandos.
@@ -69,7 +74,73 @@ Bem-vindo ao **Bot NSFW para Discord!** Este bot foi desenvolvido para adicionar
 - As bibliotecas necessárias estejam instaladas.
 - Versão Python recomendada `3.11.7`.
 
+
+## Instalação de Dependências
+
+Para configurar o ambiente de desenvolvimento, siga as etapas abaixo para instalar as dependências necessárias.
+
+### Pré-requisitos
+
+Certifique-se de ter o Python e o GIT instalados no seu sistema. Caso contrário, faça o download e instale a versão mais recente do [Python](https://www.python.org/downloads/) e do [GIT](https://git-scm.com/downloads/).
+
+### Instalação
+
+1. Clone este repositório em seu ambiente local:
+
+    ```bash
+    git clone https://github.com/MatheusCoding/nannoDiscord.git
+    ```
+
+2. Navegue até o diretório do projeto:
+
+    ```bash
+    cd nannoDiscord
+    ```
+
+3. Instale as dependências usando o `pip` e o arquivo `requirements.txt`:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+Este comando instalará automaticamente todas as dependências necessárias para o seu projeto.
+
+### Configuração do Ambiente Virtual (Opcional, mas Recomendado)
+
+Para isolar as dependências do projeto, você pode configurar um ambiente virtual. Isso é especialmente útil se estiver trabalhando em vários projetos para evitar conflitos de dependências.
+
+1. Instale a biblioteca `virtualenv` (caso ainda não tenha):
+
+    ```bash
+    pip install virtualenv
+    ```
+
+2. Crie um ambiente virtual no diretório do projeto:
+
+    ```bash
+    virtualenv venv
+    ```
+
+3. Ative o ambiente virtual:
+
+    - No Windows:
+
+        ```bash
+        .\venv\Scripts\activate
+        ```
+
+    - No Linux/Mac:
+
+        ```bash
+        source venv/bin/activate
+        ```
+
+
 ## Contribuições
+
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests no repositório do bot.
 
-**Divirta-se com o Bot NSFW para Discord!** 🎉
+Se este projeto trouxe algo positivo à sua jornada, uma ⭐️ seria incrível.
+
+
+**✨Divirta-se com o Bot NSFW para Discord!** 🔞🤖
