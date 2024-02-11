@@ -20,7 +20,7 @@ class Dropdown(discord.ui.Select):
             '2': 'Para denunciar um membro é __indispensável__ as seguintes informações:\n\n> 1. Motivo da denúncia\n> 2. Nick do denunciado (de preferência o ID)\n> 3. Provas\n\nNa falta de alguma das informações acima é **inviável** realizar qualquer punição!',
             '3': 'Para apelar uma punição é __obrigatório__ as seguintes informações:\n\n> 1. Motivo da punição\n> 2. Nick do punido (de preferência o ID)\n> 3. Motivo para retirar a punição\n\nNa falta de alguma das informações acima é **impossível** realizar qualquer apelamento!',
             '4': 'Existem 3 verificações na Elite, sendo elas, Verificar Pack, Verificar Idade e Verificar Interação!\nEscolha uma delas em https://discord.com/channels/982795400798937128/982811153753341952 e abra o Ticket da verificação desejada.',
-            '5': 'O EDP+ Elite é uma assinatura mensal e pode ser adquirido por pikas, sonhos ou PIX.\n\n> __Pikas__: 50.000 \n\n> __Sonhos__: 50.000\n\n> __Pix__: R$5 \n\n> Para pikas, use o comando `-pagar @staff_atendente 50000` \n\n> Para sonhos, use o comando `+pagar @staff_atendente 50000` \n\n> Para PIX, envie o valor na chave:\n```00c72e9d-9db8-41a2-aa2d-7b0ec27e4447``` ou pelo QR [Code](https://media.discordapp.net/attachments/1124725730807394317/1187450957114638356/Screenshot_20231221_144430_Chrome.jpg?ex=6596eee1&is=658479e1&hm=7091c13aefaeaa74c799c71a2c332c2752e401adc98525eaed00b80095683d6a&)\nFavor enviar o comprovante do PIX!!!',
+            '5': 'O EDP+ Elite é uma assinatura mensal e pode ser adquirido por pikas, sonhos ou PIX.\n\n> __Pikas__: 50.000 \n> __Sonhos__: 50.000\n> __Pix__: R$5 \n\n> Para pikas, use o comando `-pagar @staff_atendente 50000` \n> Para sonhos, use o comando `+pagar @staff_atendente 50000` \n> Para PIX, envie o valor na chave:\n```00c72e9d-9db8-41a2-aa2d-7b0ec27e4447``` ou pelo QR [Code](https://media.discordapp.net/attachments/1124725730807394317/1187450957114638356/Screenshot_20231221_144430_Chrome.jpg?ex=6596eee1&is=658479e1&hm=7091c13aefaeaa74c799c71a2c332c2752e401adc98525eaed00b80095683d6a&)\nFavor enviar o comprovante do PIX!!!',
             '6': 'Você ganhou um sorteio ou evento? Parabéns!!!\nInforme o nome do sorteio/evento e o prêmio',
             '7': 'As parcerias do Elite são feitas através de **sorteios**. Para patrocinar um sorteio, você deve pagar o valor do prêmio, como PIX, Nitro ou Sonhos.\n\nCom isso, terá direito a mencionar o ping de sorteios e enviar o link do seu servidor.',
             '8': 'Para fazer parte da __Staff EDP__, responda as perguntas abaixo:\n\n> Qual o seu nick e ID?\n> Qual a sua idade?\n> Qual a sua ocupação atual?\n> Quanto tempo faz parte da EDP?\n> Qual a sua disponibilidade?\n> Tem um bom microfone?\n> Se considera um membro ativo no servidor?\n> Já fez parte de alguma Staff? Se sim, qual?\n> Está ciente de todas as suas funções como staff previstas em https://discord.com/channels/982795400798937128/1056017474623131749 ?\n> Faça um breve resumo das regras da Elite.',
@@ -142,7 +142,7 @@ class CreateTicket(discord.ui.View):
     @discord.ui.button(label = 'Abrir Ticket',
                        style = discord.ButtonStyle.blurple,
                        emoji = '➕')
-    async def confirm(self, interaction: discord.Interaction):
+    async def confirm(self, interaction: discord.Interaction, button: discord.ui.Button):
         self.value = True
         self.stop()
         mod = interaction.guild.get_role(id_cargo_atendente)
@@ -194,9 +194,8 @@ class CreateTicket(discord.ui.View):
         await ticket.purge(limit = 1)
         await ticket.send(
             f'📩  **|** {interaction.user.mention} ticket criado!'
-            '\n{self.msg["1"]}'
-            '\nApós a sua questão ser sanada, use `-fecharticket` '
-            'para encerrar o atendimento!'
+            f'\n{self.msg}\nApós a sua questão ser sanada, use `-fecharticket` '
+            f'para encerrar o atendimento!'
         )
 
 
@@ -214,7 +213,7 @@ class Verificacao(discord.ui.View):
                        style = discord.ButtonStyle.red,
                        emoji = '➕',
                        row = 1)
-    async def confirm_pack(self, interaction: discord.Interaction):
+    async def confirm_pack(self, interaction: discord.Interaction, button: discord.ui.Button):
         self.value = True
         self.stop()
         mod = interaction.guild.get_role(id_cargo_atendente)
@@ -267,14 +266,14 @@ class Verificacao(discord.ui.View):
         await ticket.send(
             f'📩  **|** {interaction.user.mention} ticket criado!'
             f'\n\n\n{self.msg["1"]}\nApós a sua questão ser sanada, você pode '
-            'usar `-fecharticket` para encerrar o atendimento!'
+            f'usar `-fecharticket` para encerrar o atendimento!'
         )
 
     @discord.ui.button(label = "Verificar Idade",
                        style = discord.ButtonStyle.green,
                        emoji = "➕",
                        row = 2)
-    async def confirm_idade(self, interaction: discord.Interaction):
+    async def confirm_idade(self, interaction: discord.Interaction, button: discord.ui.Button):
         self.value = True
         self.stop()
         mod = interaction.guild.get_role(id_cargo_atendente)
@@ -327,14 +326,14 @@ class Verificacao(discord.ui.View):
         await ticket.send(
             f'📩  **|** {interaction.user.mention} ticket criado!'
             f'\n{self.msg["2"]}\nApós a sua questão ser sanada, você pode usar '
-            '`-fecharticket` para encerrar o atendimento!'
+            f'`-fecharticket` para encerrar o atendimento!'
         )
 
     @discord.ui.button(label = 'Verificar Interação',
                        style = discord.ButtonStyle.gray,
                        emoji = '➕',
                        row = 3)
-    async def confirm_interacao(self, interaction: discord.Interaction):
+    async def confirm_interacao(self, interaction: discord.Interaction, button: discord.ui.Button):
         self.value = True
         self.stop()
         mod = interaction.guild.get_role(id_cargo_atendente)
@@ -376,18 +375,18 @@ class Verificacao(discord.ui.View):
                 auto_archive_duration = 10080
             )
             await ticket.edit(invitable = False)
-            await ticket.send(f'Mencionando staff: {mod.mention}')
-            await asyncio.sleep(5)
-            await ticket.purge(limit = 1)
-
         await interaction.response.send_message(
             f'Criei um ticket para você! {ticket.mention}',
             ephemeral = True
         )
+        await ticket.send(f'Mencionando staff: {mod.mention}')
+        await asyncio.sleep(5)
+        await ticket.purge(limit = 1)
+
         await ticket.send(
             f'📩  **|** {interaction.user.mention} ticket criado!'
             f'\n{self.msg["3"]}\nApós a sua questão ser sanada, você pode usar '
-            '`-fecharticket` para encerrar o atendimento!'
+            f'`-fecharticket` para encerrar o atendimento!'
         )
 
 
@@ -1389,10 +1388,11 @@ class Punicoes(discord.ui.Select):
                 if contagem_avisos < 3 or contagem_avisos % 3 != 0:
                     await canal_punicoes.send(
                         f'O membro **{member.mention}** recebeu uma punição do '
-                        f'servidor 😈 EDP 😈\n\n__Motivo:__  **{reason}**  '
-                        f'\n\n__Punição:__  **[{self.punicao.capitalize()}]**\n\n'
-                        f'**{member.mention} já tem {contagem_avisos} avisos e'
-                        f' {contagem_mutes} mutes**'
+                        f'servidor 😈 EDP 😈 aplicada por {interaction.user.mention}'
+                        f'\n\n__Motivo:__  **{reason}**\n\n__Punição:__  '
+                        f'**[{self.punicao.capitalize()}]\n\n**O membro '
+                        f'{member.mention} já tem {contagem_avisos} Avisos '
+                        f'e {contagem_mutes} Mutes'
                     )
                     await member.send(
                         f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
@@ -1407,8 +1407,9 @@ class Punicoes(discord.ui.Select):
                     )
                 elif contagem_avisos == 3:
                     await canal_punicoes.send(
-                        f'O membro {member.mention} recebeu {contagem_avisos} '
+                        f'**O membro {member.mention} recebeu {contagem_avisos} '
                         f'avisos e ganhou uma punição mais severa de 24 horas'
+                        f' aplicada por {interaction.user.mention}**'
                     )
                     await member.timeout(
                         timedelta(hours = 24),
@@ -1431,7 +1432,8 @@ class Punicoes(discord.ui.Select):
                 elif contagem_avisos == 6:
                     await canal_punicoes.send(
                         f'**O membro {member.mention} recebeu {contagem_avisos} '
-                        f'avisos e ganhou uma punição mais severa de 24 horas**'
+                        f'avisos e ganhou uma punição mais severa de 24 horas'
+                        f' aplicada por {interaction.user.mention}**'
                     )
                     await member.timeout(
                         timedelta(hours = 24),
@@ -1454,7 +1456,8 @@ class Punicoes(discord.ui.Select):
                 elif contagem_avisos == 9:
                     await canal_punicoes.send(
                         f'**O membro {member.mention} recebeu {contagem_avisos}'
-                        f' avisos e recebeu uma punição mais severa de 24 horas**'
+                        f' avisos e recebeu uma punição mais severa de 24 horas'
+                        f' aplicada por {interaction.user.mention}**'
                     )
                     await member.timeout(
                         timedelta(hours = 24),
@@ -1476,8 +1479,9 @@ class Punicoes(discord.ui.Select):
                     )
                 elif contagem_avisos >= 12:
                     await canal_punicoes.send(
-                        f'**O membro {member.mention} recebeu {contagem_avisos}'
-                        f' avisos e foi contemplado com um banimento!**'
+                        f'**O membro {member.mention} recebeu um aviso aplicado por '
+                        f'{interaction.user.mention} e como ele tem {contagem_avisos}'
+                        f' avisos o meliante foi contemplado com um banimento!**'
                         f'*Os avisos de {member.mention} foram zerados '
                         f'devido ao __banimento__*'
                     )
@@ -1516,7 +1520,8 @@ class Punicoes(discord.ui.Select):
                 if contagem_mutes == 3:
                     await canal_punicoes.send(
                         f'**O membro {member.mention} recebeu {contagem_mutes}'
-                        f' e foi contemplado com um banimento!**'
+                        f' e foi contemplado com um banimento!'
+                        f' aplicado por {interaction.user.mention}**'
                     )
                     await interaction.response.send_message(
                         f'Aviso enviado para **{member.display_name}**: '
@@ -1544,11 +1549,11 @@ class Punicoes(discord.ui.Select):
                     )
                     await canal_punicoes.send(
                         f'O membro **{member.mention}** recebeu uma punição do '
-                        f'servidor 😈 EDP 😈\n\n__Motivo:__  **{reason}**  '
-                        f'\n\n__Punição:__  **[{self.punicao.capitalize()}]'
-                        f' : {self.tempo} minutos\n\n**O membro {member.mention}'
-                        f' já tem {contagem_avisos} avisos{member.mention} já '
-                        f'tem {contagem_mutes} mutes**'
+                        f'servidor 😈 EDP 😈 aplicada por {interaction.user.mention}'
+                        f'\n\n__Motivo:__  **{reason}**\n\n__Punição:__  '
+                        f'**[{self.punicao.capitalize()}] : {self.tempo} minutos'
+                        f'\n\n**O membro {member.mention} já tem {contagem_avisos}'
+                        f' Avisos e {contagem_mutes} Mutes'
                     )
                     await member.send(
                         f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
@@ -1580,8 +1585,49 @@ class PunicoesView(discord.ui.View):
 async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
     if mute is None:
         mute = 40320
+    await novo_usuario(member)
+    await adicionar_chaves(member)
+    if punicao == 'ban':
+        await ctx.send(
+            f'Selecione um motivo para aplicar o **banimento em '
+            f'{member.display_name}.**\n*Essa mensagem será apagada '
+            f'automaticamente em 30 segundos*',
+            view = PunicoesView(punicao = punicao, membro = member,
+                                tempo_mute = mute),
+            delete_after = 30
+        )
+        await asyncio.sleep(5)
+        await ctx.message.delete()
+
+    elif punicao == 'mute':
+        await adicionar_mute(member)
+        await ctx.send(
+            f'Selecione um motivo para aplicar o **mute de {mute} minutos em '
+            f'{member.display_name}.**\n*Essa mensagem será apagada '
+            f'automaticamente em 30 segundos*',
+            view = PunicoesView(punicao = punicao, membro = member,
+                                tempo_mute = mute),
+            delete_after = 30
+        )
+        await asyncio.sleep(5)
+        await ctx.message.delete()
+
+    elif punicao == 'aviso':
+        await adicionar_aviso(member)
+        await ctx.send(
+            f'Selecione um motivo para aplicar **um aviso para '
+            f'{member.display_name}.**\n*Essa mensagem será apagada '
+            f'automaticamente em 30 segundos*',
+            view = PunicoesView(punicao = punicao, membro = member,
+                                tempo_mute = mute),
+            delete_after = 30
+        )
+        await asyncio.sleep(5)
+        await ctx.message.delete()
+    else:
         await novo_usuario(member)
         await adicionar_chaves(member)
+
         if punicao == 'ban':
             await ctx.send(
                 f'Selecione um motivo para aplicar o **banimento em '
@@ -1597,9 +1643,9 @@ async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
         elif punicao == 'mute':
             await adicionar_mute(member)
             await ctx.send(
-                f'Selecione um motivo para aplicar o **mute de 672 horas em '
-                f'{member.display_name}.**\n*Essa mensagem será apagada '
-                f'automaticamente em 30 segundos*',
+                f'Selecione um motivo para aplicar o **mute de {mute} '
+                f'minutos em {member.display_name}.**\n*Essa mensagem será'
+                f' apagada automaticamente em 30 segundos*',
                 view = PunicoesView(punicao = punicao, membro = member,
                                     tempo_mute = mute),
                 delete_after = 30
@@ -1610,7 +1656,7 @@ async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
         elif punicao == 'aviso':
             await adicionar_aviso(member)
             await ctx.send(
-                f'Selecione um motivo para aplicar **um aviso para '
+                f'Selecione um motivo para aplicar um **aviso para '
                 f'{member.display_name}.**\n*Essa mensagem será apagada '
                 f'automaticamente em 30 segundos*',
                 view = PunicoesView(punicao = punicao, membro = member,
@@ -1619,47 +1665,6 @@ async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
             )
             await asyncio.sleep(5)
             await ctx.message.delete()
-        else:
-            await novo_usuario(member)
-            await adicionar_chaves(member)
-
-            if punicao == 'ban':
-                await ctx.send(
-                    f'Selecione um motivo para aplicar o **banimento em '
-                    f'{member.display_name}.**\n*Essa mensagem será apagada '
-                    f'automaticamente em 30 segundos*',
-                    view = PunicoesView(punicao = punicao, membro = member,
-                                        tempo_mute = mute),
-                    delete_after = 30
-                )
-                await asyncio.sleep(5)
-                await ctx.message.delete()
-
-            elif punicao == 'mute':
-                await adicionar_mute(member)
-                await ctx.send(
-                    f'Selecione um motivo para aplicar o **mute de {mute} '
-                    f'minutos em {member.display_name}.**\n*Essa mensagem será'
-                    f' apagada automaticamente em 30 segundos*',
-                    view = PunicoesView(punicao = punicao, membro = member,
-                                        tempo_mute = mute),
-                    delete_after = 30
-                )
-                await asyncio.sleep(5)
-                await ctx.message.delete()
-
-            elif punicao == 'aviso':
-                await adicionar_aviso(member)
-                await ctx.send(
-                    f'Selecione um motivo para aplicar um **aviso para '
-                    f'{member.display_name}.**\n*Essa mensagem será apagada '
-                    f'automaticamente em 30 segundos*',
-                    view = PunicoesView(punicao = punicao, membro = member,
-                                        tempo_mute = mute),
-                    delete_after = 30
-                )
-                await asyncio.sleep(5)
-                await ctx.message.delete()
 
 
 @_punicao.error
