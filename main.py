@@ -601,8 +601,7 @@ async def s(ctx, membro: discord.Member):
             f'O dotado {ctx.author.mention} não conseguiu '
             f'sequestrar a passiva **{membro.global_name}** '
             'por ter pikas insuficientes💰💰 em seu saldo\n\nPara verificar '
-            'seu saldo, use o comando `-pikas`',
-            allowed_mentions = discord.AllowedMentions(roles = False)
+            'seu saldo, use o comando `-pikas`'
         )
         return
 
@@ -610,8 +609,8 @@ async def s(ctx, membro: discord.Member):
         await channel_commands.send(
             f'O dotado {ctx.author.mention} não conseguiu sequestrar '
             f'a passiva **{membro.global_name}** '
-            'por ter **VIPS** insuficientes💰💰 em seu saldo',
-            allowed_mentions = discord.AllowedMentions(roles = False)
+            f'por ter **VIPS** insuficientes💰💰 em seu saldo '
+            f'verifique seu saldo com `-vips` '
         )
         return
     else:
@@ -626,18 +625,16 @@ async def s(ctx, membro: discord.Member):
 
         await channel_porao.send(
             f'O dotado {ctx.author.mention} pagou **{custo_pikas} '
-            f'pikas** + <@&983012540663599114> e sequestrou a passiva '
-            f'{membro.mention} <:emoji_caio:1060460880162197546>',
-            allowed_mentions = discord.AllowedMentions(roles = False)
+            f'pikas** + **1 VIP** e sequestrou a passiva '
+            f'{membro.mention} <:emoji_caio:1060460880162197546> '
+            f'`verifique seu saldo com -vips`'
         )
         await channel_commands.send(
             f'O dotado {ctx.author.mention} pagou **{custo_pikas} '
-            f'pikas** + <@&983012540663599114> e sequestrou a passiva '
-            f'{membro.mention} <:emoji_caio:1060460880162197546>',
-            allowed_mentions = discord.AllowedMentions(roles = False)
+            f'pikas** + **1 VIP** e sequestrou a passiva '
+            f'{membro.mention} <:emoji_caio:1060460880162197546> '
+            f'`verifique seu saldo com -vips`'
         )
-
-        await decrementar_vitorias(ctx.author)
 
         await decrementar_vitorias(ctx.author)
 
@@ -751,8 +748,8 @@ async def n(ctx):
             if '!stop' in resposta.content:
                 embed_stop = discord.Embed(
                     title = f'O jogo foi encerrado pelo comando `!stop`',
-                    description = f'Agora ninguém vai ganhar 😭 '
-                                  f'<@&983012540663599114>\n'
+                    description = f'Agora ninguém vai ganhar as recompensas da'
+                                  f' {client.user.mention} 😭\n'
                                   f'Graças ao {resposta.author.mention} que'
                                   f' encerrou o jogo 🥺'
                 )
@@ -883,10 +880,9 @@ async def n(ctx):
 async def n_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.send(
-            f'**💕{ctx.author.mention} Desculpe, só posso participar de '
-            f'um jogo por vez! 🎮\nDescanse um pouquinho enquanto recarrego '
+            f'**💕{ctx.author.mention} Descanse um pouquinho enquanto recarrego '
             f'minhas energias! ✨\n⏳ Próximo jogo liberado em '
-            f'**{round(error.retry_after)}** segundos!'
+            f'{round(error.retry_after)} segundos**!'
         )
 
 
