@@ -1281,7 +1281,7 @@ async def saldo_error(ctx, error):
 
 
 class Punicoes(discord.ui.Select):
-    def __init__(self, punicao: str, membro: discord.User, tempo_mute: int):
+    def __init__(self, punicao: str, membro: discord.User, tempo_mute: int, id_user_interaction):
         self.msg = {
             'verificacao': 'Venda sem verificação',
             'idade': 'Idade mínima é 16',
@@ -1303,6 +1303,7 @@ class Punicoes(discord.ui.Select):
         self.punicao = punicao
         self.membro = membro
         self.tempo = tempo_mute
+        self.id_author = id_user_interaction
 
         options = [
             discord.SelectOption(value = 'verificacao',
@@ -1370,219 +1371,221 @@ class Punicoes(discord.ui.Select):
                          options = options)
 
     async def callback(self, interaction: discord.Interaction):
+        await interaction.response.defer()
         membro = self.membro
         reason = self.msg[self.values[0]]
         punicao = self.punicao
         tempo = self.tempo
+        author_id = self.id_author
 
         guild = interaction.guild
         member = guild.get_member(membro.id)
+        author_member = guild.get_member(author_id)
         mutes = await checar_mutes(member)
         duracao = timedelta(minutes = tempo)
         canal_punicoes = client.get_channel(983234083918344222)
         contagem_avisos = await checar_avisos(member)
         contagem_mutes = await checar_mutes(member)
 
-        if member:
-            if punicao == 'aviso':
-                if contagem_avisos < 3 or contagem_avisos % 3 != 0:
-                    await canal_punicoes.send(
-                        f'O membro **{member.mention}** recebeu uma punição do '
-                        f'servidor 😈 EDP 😈 aplicada por {interaction.user.mention}'
-                        f'\n\n__Motivo:__  **{reason}**\n\n__Punição:__  '
-                        f'**[{self.punicao.capitalize()}]\n\n**O membro '
-                        f'{member.mention} já tem {contagem_avisos} Avisos '
-                        f'e {contagem_mutes} Mutes'
+        if interaction.user.id == author_member.id:
+            if member:
+                if punicao == 'aviso':
+                    if contagem_avisos < 3 or contagem_avisos % 3 != 0:
+                        await canal_punicoes.send(
+                            f'O membro **{member.mention}** recebeu uma punição do '
+                            f'servidor 😈 EDP 😈 aplicada por {interaction.user.mention}'
+                            f'\n\n__Motivo:__  **{reason}**\n\n__Punição:__  '
+                            f'**[{self.punicao.capitalize()}]\n\n**O membro '
+                            f'{member.mention} já tem {contagem_avisos} Avisos '
+                            f'e {contagem_mutes} Mutes'
+                        )
+                        await member.send(
+                            f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
+                            f'\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  '
+                            f'**[{self.punicao.capitalize()}]**\n\nReceber múltiplas'
+                            f' punições pode acarretar em mute eterno ou banimento!'
+                            f'\n\nO que fazer agora?\nQueremos ajudar você a continuar'
+                            f' no servidor. Para isso, é importante:\n> 1. Conhecer '
+                            f'as <#982810991194689546> da Elite e não violá-las;\n> 2.'
+                            f' Apelar a punição em <#1077273053806997554> caso '
+                            f'acredite que cometemos um erro.'
+                        )
+                    elif contagem_avisos == 3:
+                        await canal_punicoes.send(
+                            f'**O membro {member.mention} recebeu {contagem_avisos} '
+                            f'avisos e ganhou uma punição mais severa de 24 horas'
+                            f' aplicada por {interaction.user.mention}**'
+                        )
+                        await member.timeout(
+                            timedelta(hours = 24),
+                            reason = f'**O membro {member.display_name} recebeu '
+                                     f'{contagem_avisos} avisos e ganhou uma punição'
+                                     f' mais severa de 24 horas**'
+                        )
+                        await member.send(
+                            f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
+                            f'\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  '
+                            f'**[Mute : 24 horas || Esse é o seu {contagem_avisos}º '
+                            f'Aviso]**\n\nReceber múltiplas punições pode acarretar'
+                            f' em mute eterno ou banimento!\n\nO que fazer agora?'
+                            f'\nQueremos ajudar você a continuar no servidor. Para'
+                            f' isso, é importante:\n> 1. Conhecer as '
+                            f'<#982810991194689546> da Elite e não violá-las;\n> 2.'
+                            f' Apelar a punição em <#1077273053806997554> caso '
+                            f'acredite que cometemos um erro.'
+                        )
+                    elif contagem_avisos == 6:
+                        await canal_punicoes.send(
+                            f'**O membro {member.mention} recebeu {contagem_avisos} '
+                            f'avisos e ganhou uma punição mais severa de 24 horas'
+                            f' aplicada por {interaction.user.mention}**'
+                        )
+                        await member.timeout(
+                            timedelta(hours = 24),
+                            reason = f'O membro {member.display_name} recebeu '
+                                     f'{contagem_avisos} e recebeu uma punição mais'
+                                     f' severa de 24 horas'
+                        )
+                        await member.send(
+                            f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
+                            f'\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  '
+                            f'**[Mute : 24 horas || Esse é o seu {contagem_avisos}º '
+                            f'Aviso]**\n\nReceber múltiplas punições pode acarretar'
+                            f' em mute eterno ou banimento!\n\nO que fazer agora?'
+                            f'\nQueremos ajudar você a continuar no servidor. Para'
+                            f' isso, é importante:\n> 1. Conhecer as '
+                            f'<#982810991194689546> da Elite e não violá-las;\n> 2. '
+                            f'Apelar a punição em <#1077273053806997554> caso '
+                            f'acredite que cometemos um erro.'
+                        )
+                    elif contagem_avisos == 9:
+                        await canal_punicoes.send(
+                            f'**O membro {member.mention} recebeu {contagem_avisos}'
+                            f' avisos e recebeu uma punição mais severa de 24 horas'
+                            f' aplicada por {interaction.user.mention}**'
+                        )
+                        await member.timeout(
+                            timedelta(hours = 24),
+                            reason = f'O membro {member.display_name} recebeu'
+                                     f' {contagem_avisos} e recebeu uma punição '
+                                     f'mais severa de 24 horas'
+                        )
+                        await member.send(
+                            f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
+                            f'\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  '
+                            f'**[Mute : 24 horas || Esse é o seu {contagem_avisos}º '
+                            f'Aviso]**\n\nReceber múltiplas punições pode acarretar '
+                            f'em mute eterno ou banimento!\n\nO que fazer agora?'
+                            f'\nQueremos ajudar você a continuar no servidor. Para'
+                            f' isso, é importante:\n> 1. Conhecer as '
+                            f'<#982810991194689546> da Elite e não violá-las;\n> 2.'
+                            f' Apelar a punição em <#1077273053806997554> caso '
+                            f'acredite que cometemos um erro.'
+                        )
+                    elif contagem_avisos >= 12:
+                        await canal_punicoes.send(
+                            f'**O membro {member.mention} recebeu um aviso aplicado por '
+                            f'{interaction.user.mention} e como ele tem {contagem_avisos}'
+                            f' avisos o meliante foi contemplado com um banimento!**'
+                            f'*Os avisos de {member.mention} foram zerados '
+                            f'devido ao __banimento__*'
+                        )
+                        await remover_aviso(member, 12)
+                        await member.send(
+                            f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
+                            f'\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  '
+                            f'**[Banimento]**\n\nAguardar até o Natal para poder'
+                            f' entrar novamente em https://discord.gg/edp2'
+                        )
+                        await member.ban()
+                    await interaction.followup.send(
+                        f'Aviso enviado para **{member.display_name}**: {reason}',
+                        ephemeral = True,
                     )
-                    await member.send(
-                        f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
-                        f'\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  '
-                        f'**[{self.punicao.capitalize()}]**\n\nReceber múltiplas'
-                        f' punições pode acarretar em mute eterno ou banimento!'
-                        f'\n\nO que fazer agora?\nQueremos ajudar você a continuar'
-                        f' no servidor. Para isso, é importante:\n> 1. Conhecer '
-                        f'as <#982810991194689546> da Elite e não violá-las;\n> 2.'
-                        f' Apelar a punição em <#1077273053806997554> caso '
-                        f'acredite que cometemos um erro.'
-                    )
-                elif contagem_avisos == 3:
-                    await canal_punicoes.send(
-                        f'**O membro {member.mention} recebeu {contagem_avisos} '
-                        f'avisos e ganhou uma punição mais severa de 24 horas'
-                        f' aplicada por {interaction.user.mention}**'
-                    )
-                    await member.timeout(
-                        timedelta(hours = 24),
-                        reason = f'**O membro {member.display_name} recebeu '
-                                 f'{contagem_avisos} avisos e ganhou uma punição'
-                                 f' mais severa de 24 horas**'
-                    )
-                    await member.send(
-                        f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
-                        f'\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  '
-                        f'**[Mute : 24 horas || Esse é o seu {contagem_avisos}º '
-                        f'Aviso]**\n\nReceber múltiplas punições pode acarretar'
-                        f' em mute eterno ou banimento!\n\nO que fazer agora?'
-                        f'\nQueremos ajudar você a continuar no servidor. Para'
-                        f' isso, é importante:\n> 1. Conhecer as '
-                        f'<#982810991194689546> da Elite e não violá-las;\n> 2.'
-                        f' Apelar a punição em <#1077273053806997554> caso '
-                        f'acredite que cometemos um erro.'
-                    )
-                elif contagem_avisos == 6:
-                    await canal_punicoes.send(
-                        f'**O membro {member.mention} recebeu {contagem_avisos} '
-                        f'avisos e ganhou uma punição mais severa de 24 horas'
-                        f' aplicada por {interaction.user.mention}**'
-                    )
-                    await member.timeout(
-                        timedelta(hours = 24),
-                        reason = f'O membro {member.display_name} recebeu '
-                                 f'{contagem_avisos} e recebeu uma punição mais'
-                                 f' severa de 24 horas'
-                    )
-                    await member.send(
-                        f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
-                        f'\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  '
-                        f'**[Mute : 24 horas || Esse é o seu {contagem_avisos}º '
-                        f'Aviso]**\n\nReceber múltiplas punições pode acarretar'
-                        f' em mute eterno ou banimento!\n\nO que fazer agora?'
-                        f'\nQueremos ajudar você a continuar no servidor. Para'
-                        f' isso, é importante:\n> 1. Conhecer as '
-                        f'<#982810991194689546> da Elite e não violá-las;\n> 2. '
-                        f'Apelar a punição em <#1077273053806997554> caso '
-                        f'acredite que cometemos um erro.'
-                    )
-                elif contagem_avisos == 9:
-                    await canal_punicoes.send(
-                        f'**O membro {member.mention} recebeu {contagem_avisos}'
-                        f' avisos e recebeu uma punição mais severa de 24 horas'
-                        f' aplicada por {interaction.user.mention}**'
-                    )
-                    await member.timeout(
-                        timedelta(hours = 24),
-                        reason = f'O membro {member.display_name} recebeu'
-                                 f' {contagem_avisos} e recebeu uma punição '
-                                 f'mais severa de 24 horas'
-                    )
-                    await member.send(
-                        f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
-                        f'\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  '
-                        f'**[Mute : 24 horas || Esse é o seu {contagem_avisos}º '
-                        f'Aviso]**\n\nReceber múltiplas punições pode acarretar '
-                        f'em mute eterno ou banimento!\n\nO que fazer agora?'
-                        f'\nQueremos ajudar você a continuar no servidor. Para'
-                        f' isso, é importante:\n> 1. Conhecer as '
-                        f'<#982810991194689546> da Elite e não violá-las;\n> 2.'
-                        f' Apelar a punição em <#1077273053806997554> caso '
-                        f'acredite que cometemos um erro.'
-                    )
-                elif contagem_avisos >= 12:
-                    await canal_punicoes.send(
-                        f'**O membro {member.mention} recebeu um aviso aplicado por '
-                        f'{interaction.user.mention} e como ele tem {contagem_avisos}'
-                        f' avisos o meliante foi contemplado com um banimento!**'
-                        f'*Os avisos de {member.mention} foram zerados '
-                        f'devido ao __banimento__*'
-                    )
-                    await remover_aviso(member, 12)
-                    await member.send(
-                        f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
-                        f'\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  '
-                        f'**[Banimento]**\n\nAguardar até o Natal para poder'
-                        f' entrar novamente em https://discord.gg/edp2'
-                    )
-                    await member.ban()
-                await interaction.response.send_message(
-                    f'Aviso enviado para **{member.display_name}**: '
-                    f'{reason}\n\n*Essa mensagem será apagada automaticamente'
-                    f' em 10 segundos*',
-                    ephemeral = True,
-                    delete_after = 10
-                )
 
-            elif punicao == 'ban':
-                await interaction.response.send_message(
-                    f'Aviso enviado para **{member.display_name}**: '
-                    f'{reason}\n\n*Banimento aplicado*\n\n*Essa mensagem '
-                    f'será apagada automaticamente em 10 segundos*',
-                    ephemeral = True,
-                    delete_after = 10
-                )
-                await member.send(
-                    f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
-                    f'\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  '
-                    f'**[{self.punicao.capitalize()}]**\n\nAguardar até o Natal'
-                    f' para poder entrar novamente em https://discord.gg/edp2'
-                )
-                await member.ban()
-            elif punicao == 'mute':
-                if contagem_mutes == 3:
-                    await canal_punicoes.send(
-                        f'**O membro {member.mention} recebeu {contagem_mutes}'
-                        f' e foi contemplado com um banimento!'
-                        f' aplicado por {interaction.user.mention}**'
-                    )
-                    await interaction.response.send_message(
+                elif punicao == 'ban':
+                    await interaction.followup.send(
                         f'Aviso enviado para **{member.display_name}**: '
-                        f'{reason}\n\n*Banimento aplicado*\n\n*Essa mensagem '
-                        f'será apagada automaticamente em 10 segundos*',
+                        f'{reason}\n\n*Banimento aplicado*',
                         ephemeral = True,
-                        delete_after = 10
                     )
                     await member.send(
                         f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
                         f'\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  '
-                        f'**[Banido]**\n\nAguardar até o Natal para poder '
-                        f'entrar novamente em https://discord.gg/edp2'
+                        f'**[{self.punicao.capitalize()}]**\n\nAguardar até o Natal'
+                        f' para poder entrar novamente em https://discord.gg/edp2'
                     )
-                    await remover_mute(member, 3)
                     await member.ban()
-                else:
-                    await member.timeout(duracao, reason = reason)
-                    await interaction.response.send_message(
-                        f'Aviso enviado para **{member.display_name}**: '
-                        f'{reason}\n\n*Mute aplicado*\n\n*Essa mensagem será '
-                        f'apagada automaticamente em 10 segundos*',
-                        ephemeral = True,
-                        delete_after = 10
-                    )
-                    await canal_punicoes.send(
-                        f'O membro **{member.mention}** recebeu uma punição do '
-                        f'servidor 😈 EDP 😈 aplicada por {interaction.user.mention}'
-                        f'\n\n__Motivo:__  **{reason}**\n\n__Punição:__  '
-                        f'**[{self.punicao.capitalize()}] : {self.tempo} minutos'
-                        f'\n\n**O membro {member.mention} já tem {contagem_avisos}'
-                        f' Avisos e {contagem_mutes} Mutes'
-                    )
-                    await member.send(
-                        f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
-                        f'\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  '
-                        f'**[{punicao.capitalize()} : {self.tempo} minutos || '
-                        f'Esse é o seu {mutes}º Mute]**\n\nReceber múltiplas '
-                        f'punições pode acarretar em mute eterno ou banimento!'
-                        f'\n\nO que fazer agora?\nQueremos ajudar você a '
-                        f'continuar no servidor. Para isso, é importante:\n> 1. '
-                        f'Conhecer as <#982810991194689546> da Elite e não '
-                        f'violá-las;\n> 2. Apelar a punição em '
-                        f'<#1077273053806997554> caso acredite que cometemos'
-                        f' um erro.'
-                    )
+                elif punicao == 'mute':
+                    if contagem_mutes == 3:
+                        await canal_punicoes.send(
+                            f'**O membro {member.mention} recebeu {contagem_mutes}'
+                            f' e foi contemplado com um banimento!'
+                            f' aplicado por {interaction.user.mention}**'
+                        )
+                        await interaction.followup.send(
+                            f'Aviso enviado para **{member.display_name}**: '
+                            f'{reason}\n\n*Banimento aplicado*\n\n*',
+                            ephemeral = True,
+                        )
+                        await member.send(
+                            f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
+                            f'\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  '
+                            f'**[Banido]**\n\nAguardar até o Natal para poder '
+                            f'entrar novamente em https://discord.gg/edp2'
+                        )
+                        await remover_mute(member, 3)
+                        await member.ban()
+                    else:
+                        await member.timeout(duracao, reason = reason)
+                        await interaction.followup.send(
+                            f'Aviso enviado para **{member.display_name}**: '
+                            f'{reason}\n\n*Mute aplicado*',
+                            ephemeral = True,
+                        )
+                        await canal_punicoes.send(
+                            f'O membro **{member.mention}** recebeu uma punição do '
+                            f'servidor 😈 EDP 😈 aplicada por {interaction.user.mention}'
+                            f'\n\n__Motivo:__  **{reason}**\n\n__Punição:__  '
+                            f'**[{self.punicao.capitalize()}] : {self.tempo} minutos'
+                            f'\n\n**O membro {member.mention} já tem {contagem_avisos}'
+                            f' Avisos e {contagem_mutes} Mutes'
+                        )
+                        await member.send(
+                            f'⚠️ Você recebeu uma punição do servidor 😈 EDP 😈'
+                            f'\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  '
+                            f'**[{punicao.capitalize()} : {self.tempo} minutos || '
+                            f'Esse é o seu {mutes}º Mute]**\n\nReceber múltiplas '
+                            f'punições pode acarretar em mute eterno ou banimento!'
+                            f'\n\nO que fazer agora?\nQueremos ajudar você a '
+                            f'continuar no servidor. Para isso, é importante:\n> 1. '
+                            f'Conhecer as <#982810991194689546> da Elite e não '
+                            f'violá-las;\n> 2. Apelar a punição em '
+                            f'<#1077273053806997554> caso acredite que cometemos'
+                            f' um erro.'
+                        )
+            else:
+                await interaction.followup.send('Membro não encontrado', ephemeral = True)
         else:
-            await interaction.response.send_message('Membro não encontrado', ephemeral = True)
+            await interaction.followup.send(
+                f'{interaction.user.display_name} Você não tem permissão para '
+                f'usar este Menu, somente o Moderador {author_member.display_name}'
+                f' pode fazer isso!', ephemeral = True)
 
 
 class PunicoesView(discord.ui.View):
-    def __init__(self, punicao: str, membro: discord.User, tempo_mute: int):
+    def __init__(self, punicao: str, membro: discord.User, tempo_mute: int, interacao):
         super().__init__(timeout = None)
         self.add_item(Punicoes(punicao = punicao,
                                membro = membro,
-                               tempo_mute = tempo_mute))
+                               tempo_mute = tempo_mute,
+                               id_user_interaction = interacao))
 
 
 @client.command(name = 'mod')
 @commands.has_permissions(ban_members = True)
 async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
+    id_author = ctx.author.id
     if mute is None:
         mute = 40320
     await novo_usuario(member)
@@ -1593,7 +1596,7 @@ async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
             f'{member.display_name}.**\n*Essa mensagem será apagada '
             f'automaticamente em 30 segundos*',
             view = PunicoesView(punicao = punicao, membro = member,
-                                tempo_mute = mute),
+                                tempo_mute = mute, interacao = id_author),
             delete_after = 30
         )
         await asyncio.sleep(5)
@@ -1606,7 +1609,7 @@ async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
             f'{member.display_name}.**\n*Essa mensagem será apagada '
             f'automaticamente em 30 segundos*',
             view = PunicoesView(punicao = punicao, membro = member,
-                                tempo_mute = mute),
+                                tempo_mute = mute, interacao = id_author),
             delete_after = 30
         )
         await asyncio.sleep(5)
@@ -1619,7 +1622,7 @@ async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
             f'{member.display_name}.**\n*Essa mensagem será apagada '
             f'automaticamente em 30 segundos*',
             view = PunicoesView(punicao = punicao, membro = member,
-                                tempo_mute = mute),
+                                tempo_mute = mute, interacao = id_author),
             delete_after = 30
         )
         await asyncio.sleep(5)
@@ -1634,7 +1637,7 @@ async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
                 f'{member.display_name}.**\n*Essa mensagem será apagada '
                 f'automaticamente em 30 segundos*',
                 view = PunicoesView(punicao = punicao, membro = member,
-                                    tempo_mute = mute),
+                                    tempo_mute = mute, interacao = id_author),
                 delete_after = 30
             )
             await asyncio.sleep(5)
@@ -1647,7 +1650,7 @@ async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
                 f'minutos em {member.display_name}.**\n*Essa mensagem será'
                 f' apagada automaticamente em 30 segundos*',
                 view = PunicoesView(punicao = punicao, membro = member,
-                                    tempo_mute = mute),
+                                    tempo_mute = mute, interacao = id_author),
                 delete_after = 30
             )
             await asyncio.sleep(5)
@@ -1660,7 +1663,7 @@ async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
                 f'{member.display_name}.**\n*Essa mensagem será apagada '
                 f'automaticamente em 30 segundos*',
                 view = PunicoesView(punicao = punicao, membro = member,
-                                    tempo_mute = mute),
+                                    tempo_mute = mute, interacao = id_author),
                 delete_after = 30
             )
             await asyncio.sleep(5)
@@ -1723,7 +1726,7 @@ async def _unmute(ctx, member: discord.Member):
             f'**A punição mute foi removida de {member.display_name}**'
         )
         await member.send(
-            f'Sua punição de *mute* foi removida graças ao **{ctx.author}**'
+            f'Sua punição de **mute** foi removida!'
         )
     else:
         await canal.send(
@@ -1749,12 +1752,13 @@ async def _removeravisos(ctx, member: discord.Member, quantidade: int = None):
         await canal.send(f'{ctx.author.mention} Por favor insira quantos avisos deseja'
                          f' remover de {member.display_name}\n\n'
                          f'Atualmente o membro possui `{avisos}` **Aviso(s)**')
-    if avisos > 0:
+    if avisos > 0 and quantidade <= avisos:
         await remover_aviso(member, quantidade)
-        await member.send(f'Você teve **{quantidade} aviso(s)** removido(s) '
-                          f'graças ao **{ctx.author.mention}**')
+        await member.send(f'Você teve **{quantidade} aviso(s)** removido(s)!')
         await canal.send(f'**{quantidade} aviso(s)** removido(s) de '
                          f'{member.display_name}')
+    else:
+        return
 
 
 @_removeravisos.error
@@ -1776,11 +1780,10 @@ async def _removermutes(ctx, member: discord.Member, quantidade: int = None):
                          f' remover de {member.display_name}\n\n'
                          f'Atualmente o membro possui `{mutes}` **Mute(s)**')
 
-    if mutes > 0:
+    if mutes > 0 and quantidade <= mutes:
         await remover_mute(member, quantidade)
-        await member.send(f'Você teve **{quantidade} mute(s)** removido(s) '
-                          f'graças ao **{ctx.author.mention}**')
-        await canal.send(f'**{quantidade} aviso** removido de '
+        await member.send(f'Você teve **{quantidade} mute(s)** removido(s)!')
+        await canal.send(f'**{quantidade} mute(s)** removido de '
                          f'{member.display_name}')
 
 
