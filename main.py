@@ -20,7 +20,7 @@ class Dropdown(discord.ui.Select):
         self.mensagens = {
             "1": "Para tirar dúvidas sobre o servidor, envie nesse ticket!",
             "2": "Para denunciar um membro é __indispensável__ as seguintes informações:\n\n> 1. Motivo da denúncia\n> 2. Nick do denunciado (de preferência o ID)\n> 3. Provas\n\nNa falta de alguma das informações acima é **inviável** realizar qualquer punição!",
-            "3": "Para apelar uma punição é __obrigatório__ possuir paciência e aguardar um Staff retirar o seu mute temporariamente para você poder explicar o motivo de retirarmos a punição definitivamente",
+            "3": "Para apelar uma advertência é __obrigatório__  as seguintes informações:\n\n> 1. Motivo do aviso\n> 2. Nick do punido (de preferência o ID)\n> 3. Motivos para retirarmos o aviso\n\nNa falta de alguma das informações acima é **inviável** realizar qualquer apelação!",
             "4": "Existem 3 verificações na Elite, sendo elas, Verificar Pack, Verificar Idade e Verificar Interação!\nEscolha uma delas em https://discord.com/channels/982795400798937128/982811153753341952 e abra o Ticket da verificação desejada.",
             "5": "O EDP+ Elite é uma assinatura mensal e pode ser adquirido por pikas, sonhos ou PIX.\n\n> __Pikas__: 50.000 \n> __Sonhos__: 50.000\n> __Pix__: R$5 \n\n> Para pikas, use o comando `-pagar @staff_atendente 50000` \n> Para sonhos, use o comando `+pagar @staff_atendente 50000` \n> Para PIX, envie o valor na chave:\n```00c72e9d-9db8-41a2-aa2d-7b0ec27e4447``` ou pelo QR [Code](https://media.discordapp.net/attachments/1124725730807394317/1187450957114638356/Screenshot_20231221_144430_Chrome.jpg?ex=6596eee1&is=658479e1&hm=7091c13aefaeaa74c799c71a2c332c2752e401adc98525eaed00b80095683d6a&)\nFavor enviar o comprovante do PIX!!!",
             "6": "Você ganhou um sorteio ou evento? Parabéns!!!\nInforme o nome do sorteio/evento e o prêmio",
@@ -984,7 +984,7 @@ async def _saldo(ctx, user: discord.User = None):
 
     moedas_author = await checar_saldo(ctx.author)
     await ctx.send(
-        f"{ctx.author.mention} possui **{moedas_author} pikas "
+        f"{ctx.author.mention} possui **{moedas_author} "
         "pikas <:emoji_pica:1014864321349681232>**"
     )
 
@@ -1453,7 +1453,7 @@ class Punicoes(discord.ui.Select):
                             f"\nQueremos ajudar você a continuar no servidor. Para"
                             f" isso, é importante:\n> 1. Conhecer as "
                             f"<#982810991194689546> da Elite e não violá-las;\n> 2."
-                            f" Apelar a punição em <#1077273053806997554> caso "
+                            f" Apelar a punição em https://discord.gg/4sdVrdVjbr caso "
                             f"acredite que cometemos um erro."
                         )
                     elif contagem_avisos == 6:
@@ -1477,7 +1477,7 @@ class Punicoes(discord.ui.Select):
                             f"\nQueremos ajudar você a continuar no servidor. Para"
                             f" isso, é importante:\n> 1. Conhecer as "
                             f"<#982810991194689546> da Elite e não violá-las;\n> 2. "
-                            f"Apelar a punição em <#1077273053806997554> caso "
+                            f"Apelar a punição em https://discord.gg/4sdVrdVjbr caso "
                             f"acredite que cometemos um erro."
                         )
                     elif contagem_avisos == 9:
@@ -1501,7 +1501,7 @@ class Punicoes(discord.ui.Select):
                             f"\nQueremos ajudar você a continuar no servidor. Para"
                             f" isso, é importante:\n> 1. Conhecer as "
                             f"<#982810991194689546> da Elite e não violá-las;\n> 2."
-                            f" Apelar a punição em <#1077273053806997554> caso "
+                            f" Apelar a punição em https://discord.gg/4sdVrdVjbr caso "
                             f"acredite que cometemos um erro."
                         )
                     elif contagem_avisos >= 12:
@@ -1516,7 +1516,9 @@ class Punicoes(discord.ui.Select):
                         await member.send(
                             f"⚠️ Você recebeu uma punição do servidor 😈 EDP 😈"
                             f"\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  "
-                            f"**[Banimento]**\n\nAguardar até o Natal para poder"
+                            f"**[Banimento]**\n\nO que fazer agora?"
+                            f" 1. Apelar a punição em https://discord.gg/4sdVrdVjbr caso "
+                            f" acredite que cometemos um erro.\n 2. Aguardar até o Natal para poder"
                             f" entrar novamente em https://discord.gg/edp2"
                         )
                         await member.ban()
@@ -1540,8 +1542,10 @@ class Punicoes(discord.ui.Select):
                     await member.send(
                         f"⚠️ Você recebeu uma punição do servidor 😈 EDP 😈"
                         f"\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  "
-                        f"**[{self.punicao.capitalize()}]**\n\nAguardar até o Natal"
-                        f" para poder entrar novamente em https://discord.gg/edp2"
+                        f"**[{self.punicao.capitalize()}]**\n\nO que fazer agora?"
+                        f" 1. Apelar a punição em https://discord.gg/4sdVrdVjbr caso"
+                        f" acredite que cometemos um erro.\n 2. Aguardar até o Natal para poder"
+                        f" entrar novamente em https://discord.gg/edp2"
                     )
                     await member.ban()
                 elif punicao == "mute":
@@ -1559,8 +1563,10 @@ class Punicoes(discord.ui.Select):
                         await member.send(
                             f"⚠️ Você recebeu uma punição do servidor 😈 EDP 😈"
                             f"\n\n__Motivo:__  **{reason}**  \n\n__Punição:__  "
-                            f"**[Banido]**\n\nAguardar até o Natal para poder "
-                            f"entrar novamente em https://discord.gg/edp2"
+                            f"**[Banido]**\n\nO que fazer agora?\n"
+                            f" 1. Apelar a punição em https://discord.gg/4sdVrdVjbr caso"
+                            f" acredite que cometemos um erro.\n 2. Aguardar até o Natal para poder"
+                            f" entrar novamente em https://discord.gg/edp2"
                         )
                         await remover_mute(member, 3)
                         await member.ban()
@@ -1589,7 +1595,7 @@ class Punicoes(discord.ui.Select):
                             f"continuar no servidor. Para isso, é importante:\n> 1. "
                             f"Conhecer as <#982810991194689546> da Elite e não "
                             f"violá-las;\n> 2. Apelar a punição em "
-                            f"<#1077273053806997554> caso acredite que cometemos"
+                            f"https://discord.gg/4sdVrdVjbr caso acredite que cometemos"
                             f" um erro."
                         )
             else:
@@ -1850,8 +1856,8 @@ async def __avatar(ctx, member: discord.Member = None):
     )
     embed.set_image(url=member.avatar.url)
     embed.set_footer(
-        text=f"🕵️‍♂️ Após uma investigação profunda, descobri que "
-        f"{member.display_name} é esse coiso acima\nVamos "
+        text=f"🕵️‍♂️ Após uma investigação profunda, descobri que\n "
+        f"{member.display_name} é esse coiso acima.\nVamos "
         f"{ctx.author}, não se misture com essa gentalha!"
     )
 
