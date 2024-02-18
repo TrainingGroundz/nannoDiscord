@@ -6,7 +6,7 @@ import pytz
 
 load_dotenv()
 
-cliente = pymongo.MongoClient(os.getenv('MONGODB_TOKEN'))
+cliente = pymongo.MongoClient(os.getenv('MONGODB'))
 bancodedados = cliente['economia']
 usuarios = bancodedados['usuarios']
 
