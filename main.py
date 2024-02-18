@@ -2,12 +2,10 @@ import asyncio
 import random
 from datetime import timedelta
 from io import BytesIO
-
 import discord
 import requests
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont
-
 from database import *
 
 load_dotenv()
@@ -1862,6 +1860,25 @@ async def __avatar(ctx, member: discord.Member = None):
     )
 
     await ctx.send(embed=embed)
+
+
+@client.command(name="bot_avatar")
+@commands.has_guild_permissions(administrator=True)
+async def addavatar(ctx: commands.Context, attachment: discord.Attachment):
+    data = await attachment.read()
+    await client.user.edit(avatar=data)
+    await ctx.send(f"Avatar atualizado\nenviado por {ctx.author.mention}!")
+
+
+@addavatar.error
+async def addavatar(ctx, error):
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send("Parece que você não tem permissões suficientes!")
+    elif isinstance(error, commands.MissingRequiredAttachment):
+        await ctx.send(
+            f"Olá {ctx.author.mention}, por favor envie o avatar "
+            f"que deseja usar!"
+        )
 
 
 client.run(os.getenv("TOKEN_BOT"))
