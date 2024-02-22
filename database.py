@@ -137,40 +137,6 @@ async def decrementar_vitorias(usuario):
         return
 
 
-async def criar_rank(pagina, ordenar_por):
-    skip = (pagina - 1) * 5
-
-    campo_ordenacao = ordenar_por if ordenar_por in ['moedas', 'vitorias'] else 'moedas'
-
-    pipeline = [
-        {'$sort': {campo_ordenacao: -1}},
-        {'$project': {'discord_id': 1, 'moedas': 1, 'vitorias': 1, '_id': 0}},
-        {'$skip': skip},
-        {'$limit': 5}
-    ]
-
-    resultado = usuarios.aggregate(pipeline)
-
-    rank = []
-    posicao = 1 + skip
-
-    for usuario in resultado:
-        discord_id = usuario['discord_id']
-        moedas = usuario['moedas']
-        vitorias = usuario.get('vitorias', 0)
-
-        rank.append({
-            'posicao': posicao,
-            'discord_id': discord_id,
-            'moedas': moedas,
-            'vitorias': vitorias
-        })
-
-        posicao += 1
-
-    return rank
-
-
 async def adicionar_chaves(usuario):
     filtro = {'discord_id': usuario.id}
     resultado = list(usuarios.find(filtro))

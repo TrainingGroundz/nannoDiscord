@@ -7,6 +7,7 @@ import requests
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont
 from database import *
+import datetime
 
 load_dotenv()
 
@@ -162,7 +163,7 @@ class CreateTicket(discord.ui.View):
         label="Abrir Ticket", style=discord.ButtonStyle.blurple, emoji="➕"
     )
     async def confirm(
-        self, interaction: discord.Interaction, button: discord.ui.Button
+            self, interaction: discord.Interaction, button: discord.ui.Button
     ):
         self.value = True
         self.stop()
@@ -175,7 +176,8 @@ class CreateTicket(discord.ui.View):
                     ticket = thread
                 else:
                     await interaction.response.send_message(
-                        "Você já tem um atendimento em andamento!", ephemeral=True
+                        "Você já tem um atendimento em andamento!",
+                        ephemeral=True
                     )
                     return
 
@@ -230,7 +232,7 @@ class Verificacao(discord.ui.View):
         label="Verificar Pack", style=discord.ButtonStyle.red, emoji="➕", row=1
     )
     async def confirm_pack(
-        self, interaction: discord.Interaction, button: discord.ui.Button
+            self, interaction: discord.Interaction, button: discord.ui.Button
     ):
         self.value = True
         self.stop()
@@ -243,7 +245,8 @@ class Verificacao(discord.ui.View):
                     ticket = thread
                 else:
                     await interaction.response.send_message(
-                        "Você já tem um atendimento em andamento!", ephemeral=True
+                        "Você já tem um atendimento em andamento!",
+                        ephemeral=True
                     )
                     return
 
@@ -285,10 +288,11 @@ class Verificacao(discord.ui.View):
         )
 
     @discord.ui.button(
-        label="Verificar Idade", style=discord.ButtonStyle.green, emoji="➕", row=2
+        label="Verificar Idade", style=discord.ButtonStyle.green, emoji="➕",
+        row=2
     )
     async def confirm_idade(
-        self, interaction: discord.Interaction, button: discord.ui.Button
+            self, interaction: discord.Interaction, button: discord.ui.Button
     ):
         self.value = True
         self.stop()
@@ -301,7 +305,8 @@ class Verificacao(discord.ui.View):
                     ticket = thread
                 else:
                     await interaction.response.send_message(
-                        "Você já tem um atendimento em andamento!", ephemeral=True
+                        "Você já tem um atendimento em andamento!",
+                        ephemeral=True
                     )
                     return
 
@@ -342,10 +347,11 @@ class Verificacao(discord.ui.View):
         )
 
     @discord.ui.button(
-        label="Verificar Interação", style=discord.ButtonStyle.gray, emoji="➕", row=3
+        label="Verificar Interação", style=discord.ButtonStyle.gray, emoji="➕",
+        row=3
     )
     async def confirm_interacao(
-        self, interaction: discord.Interaction, button: discord.ui.Button
+            self, interaction: discord.Interaction, button: discord.ui.Button
     ):
         self.value = True
         self.stop()
@@ -358,7 +364,8 @@ class Verificacao(discord.ui.View):
                     ticket = thread
                 else:
                     await interaction.response.send_message(
-                        "Você já tem um atendimento em andamento!", ephemeral=True
+                        "Você já tem um atendimento em andamento!",
+                        ephemeral=True
                     )
                     return
 
@@ -405,7 +412,8 @@ class Client(commands.Bot):
 
     async def on_ready(self):
         activity = discord.Game(name="com ELITE DAS PUTARIAS", type=3)
-        await self.change_presence(status=discord.Status.online, activity=activity)
+        await self.change_presence(status=discord.Status.online,
+                                   activity=activity)
         print(f"Sou o {self.user} e acabei de me conectar")
 
     async def setup_hook(self):
@@ -439,7 +447,8 @@ async def repeat_message_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(
             "Você não tem a tag <@&983012540663599114> para utilizar " "esse comando",
-            allowed_mentions=discord.AllowedMentions(roles=False, everyone=False),
+            allowed_mentions=discord.AllowedMentions(roles=False,
+                                                     everyone=False),
         )
 
 
@@ -457,16 +466,19 @@ async def addvip(ctx, membro: discord.Member, quantidade: int):
         await add_vip(membro, quantidade)
         await ctx.send(
             f"{ctx.author.mention} O valor de **{quantidade} VIPS** "
-            ":moneybag: foi enviado com sucesso para **{membro.global_name}**"
+            f":moneybag: foi enviado com sucesso para **{membro.global_name}**"
         )
 
 
 @addvip.error
 async def addvip_error(ctx, error):
     error_messages = {
-        commands.MissingPermissions: lambda e: "Você não tem permissão para usar este comando!",
-        commands.MissingRequiredArgument: lambda e: "Opaaa, algo deu errado. Use o comando corretamente mencionando o membro que deseja adicionar saldo!",
-        commands.BadArgument: lambda e: "Hmmm, eu não consegui encontrar esse membro. Certifique-se de mencionar um membro válido!",
+        commands.MissingPermissions: lambda
+            e: "Você não tem permissão para usar este comando!",
+        commands.MissingRequiredArgument: lambda
+            e: "Opaaa, algo deu errado. Use o comando corretamente mencionando o membro que deseja adicionar saldo!",
+        commands.BadArgument: lambda
+            e: "Hmmm, eu não consegui encontrar esse membro. Certifique-se de mencionar um membro válido!",
     }
 
     for error_type, message_func in error_messages.items():
@@ -489,11 +501,14 @@ async def addedp(ctx, membro: discord.Member):
 @addedp.error
 async def addedp_error(ctx, error):
     error_messages = {
-        commands.MissingPermissions: lambda e: "Você não tem permissão para usar este comando!",
-        commands.MissingRequiredArgument: lambda e: "Opaaa, algo deu errado. Use o comando corretamente mencionando "
-        "o membro que deseja atribuir o cargo!",
-        commands.BadArgument: lambda e: "Hmmm, eu não consegui encontrar esse membro. "
-        "Certifique-se de mencionar um membro válido!",
+        commands.MissingPermissions: lambda
+            e: "Você não tem permissão para usar este comando!",
+        commands.MissingRequiredArgument: lambda
+            e: "Opaaa, algo deu errado. Use o comando corretamente mencionando "
+               "o membro que deseja atribuir o cargo!",
+        commands.BadArgument: lambda
+            e: "Hmmm, eu não consegui encontrar esse membro. "
+               "Certifique-se de mencionar um membro válido!",
     }
 
     for error_type, message_func in error_messages.items():
@@ -532,11 +547,14 @@ async def removevip(ctx, membro: discord.Member, quantidade: int):
 @removevip.error
 async def removevip_error(ctx, error):
     error_messages = {
-        commands.MissingPermissions: lambda e: "Você não tem permissão para usar este comando!",
-        commands.MissingRequiredArgument: lambda e: "Opaaa, algo deu errado. Use o comando corretamente mencionando "
-        "o membro que deseja remover saldo!",
-        commands.BadArgument: lambda e: "Hmmm, eu não consegui encontrar esse membro. Certifique-se de "
-        "mencionar um membro válido!",
+        commands.MissingPermissions: lambda
+            e: "Você não tem permissão para usar este comando!",
+        commands.MissingRequiredArgument: lambda
+            e: "Opaaa, algo deu errado. Use o comando corretamente mencionando "
+               "o membro que deseja remover saldo!",
+        commands.BadArgument: lambda
+            e: "Hmmm, eu não consegui encontrar esse membro. Certifique-se de "
+               "mencionar um membro válido!",
     }
 
     for error_type, message_func in error_messages.items():
@@ -562,11 +580,14 @@ async def removeedp(ctx, membro: discord.Member):
 @removeedp.error
 async def removeedp_error(ctx, error):
     error_messages = {
-        commands.MissingPermissions: lambda e: "Você não tem permissão para usar este comando!",
-        commands.MissingRequiredArgument: lambda e: "Opaaa, algo deu errado. Use o comando corretamente mencionando o "
-        "membro que deseja remover o cargo!",
-        commands.BadArgument: lambda e: "Hmmm, eu não consegui encontrar esse membro. Certifique-se de "
-        "mencionar um membro válido!",
+        commands.MissingPermissions: lambda
+            e: "Você não tem permissão para usar este comando!",
+        commands.MissingRequiredArgument: lambda
+            e: "Opaaa, algo deu errado. Use o comando corretamente mencionando o "
+               "membro que deseja remover o cargo!",
+        commands.BadArgument: lambda
+            e: "Hmmm, eu não consegui encontrar esse membro. Certifique-se de "
+               "mencionar um membro válido!",
     }
 
     for error_type, message_func in error_messages.items():
@@ -638,16 +659,19 @@ async def s(ctx, membro: discord.Member):
         await ctx.author.remove_roles(sequestrador)
         await membro.remove_roles(sequestrado)
 
-        await channel_commands.send(f"Tempo esgotado! {membro.mention} foi liberado")
+        await channel_commands.send(
+            f"Tempo esgotado! {membro.mention} foi liberado")
 
 
 @s.error
 async def s_error(ctx, error):
     error_messages = {
-        commands.MissingRequiredArgument: lambda e: "Opaaa, algo deu errado. Use o comando corretamente mencionando o "
-        "membro que deseja **sequestrar** !",
-        commands.BadArgument: lambda e: "Hmmm, eu não consegui encontrar esse membro. "
-        "Certifique-se de mencionar um membro válido !",
+        commands.MissingRequiredArgument: lambda
+            e: "Opaaa, algo deu errado. Use o comando corretamente mencionando o "
+               "membro que deseja **sequestrar** !",
+        commands.BadArgument: lambda
+            e: "Hmmm, eu não consegui encontrar esse membro. "
+               "Certifique-se de mencionar um membro válido !",
     }
 
     for error_type, message_func in error_messages.items():
@@ -674,9 +698,9 @@ async def n(ctx):
     embed = discord.Embed(
         title="Descubra o número secreto e ganhe VIP",
         description=f"<:emoji_caio:1060460880162197546> Seu número secreto "
-        f"está entre **{inicio}** e **{fim}**\n"
-        f"Você tem 7 chances de acertá-lo em **2 minutos**\n\n\n"
-        f"Digite `!stop` para terminar o jogo a qualquer momento",
+                    f"está entre **{inicio}** e **{fim}**\n"
+                    f"Você tem 7 chances de acertá-lo em **2 minutos**\n\n\n"
+                    f"Digite `!stop` para terminar o jogo a qualquer momento",
     )
 
     await porao_channel.send(embed=embed)
@@ -750,8 +774,8 @@ async def n(ctx):
             resposta = await client.wait_for(
                 "message",
                 check=lambda m: m.channel == porao_channel
-                and m.author != client.user
-                and not m.content.startswith("-n"),
+                                and m.author != client.user
+                                and not m.content.startswith("-n"),
                 timeout=120,
             )
 
@@ -759,9 +783,9 @@ async def n(ctx):
                 embed_stop = discord.Embed(
                     title="O jogo foi encerrado pelo comando `!stop`",
                     description=f"Agora ninguém vai ganhar as recompensas da"
-                    f" {client.user.mention} 😭\n"
-                    f"Graças ao {resposta.author.mention} que"
-                    f" encerrou o jogo 🥺",
+                                f" {client.user.mention} 😭\n"
+                                f"Graças ao {resposta.author.mention} que"
+                                f" encerrou o jogo 🥺",
                 )
 
                 await porao_channel.send(embed=embed_stop)
@@ -773,11 +797,11 @@ async def n(ctx):
                 if not inicio <= resposta_user <= fim:
                     embed_range = discord.Embed(
                         title=f"❌ {resposta.content} está fora do intervalo!\n"
-                        f"O número secreto deve estar entre {inicio} e "
-                        f"{fim}! Boa sorte 🫱🏻‍🫲🏾",
+                              f"O número secreto deve estar entre {inicio} e "
+                              f"{fim}! Boa sorte 🫱🏻‍🫲🏾",
                         description=f"{resposta.author.mention} 😭 Não se "
-                        f"preocupe, você ainda tem "
-                        f"**{tentativas_restantes}** tentativas ✔️",
+                                    f"preocupe, você ainda tem "
+                                    f"**{tentativas_restantes}** tentativas ✔️",
                     )
 
                     await porao_channel.send(embed=embed_range)
@@ -816,8 +840,8 @@ async def n(ctx):
                         embed_tentativa = discord.Embed(
                             title=f"{resposta_user} {hints}",
                             description=f"{mensagem}\n\n"
-                            f"✔️ {tentativas_restantes} "
-                            f"tentativas restantes",
+                                        f"✔️ {tentativas_restantes} "
+                                        f"tentativas restantes",
                             color=cor_embed,
                         )
 
@@ -845,10 +869,10 @@ async def n(ctx):
 
                 embed_acerto = discord.Embed(
                     description=f"# Parabéns 👻!\n O número secreto era "
-                    f"**{numero_secreto}**\n{mensagem_registro}"
-                    f"\nVocê ganhou **1 VIP** e agora possui "
-                    f"{saldo_vip + 1} VIPs\nUse o comando "
-                    f"`-topvip` para ver sua posição!",
+                                f"**{numero_secreto}**\n{mensagem_registro}"
+                                f"\nVocê ganhou **1 VIP** e agora possui "
+                                f"{saldo_vip + 1} VIPs\nUse o comando "
+                                f"`-topvip` para ver sua posição!",
                     color=discord.Color.light_grey(),
                 )
 
@@ -875,9 +899,9 @@ async def n(ctx):
             embed_game_over = discord.Embed(
                 title="Game Over",
                 description=f"☠️ É meu puto, pensei que você fosse um "
-                f"verdadeiro **transudo**, mas me enganei!\nO "
-                f"número secreto era **{numero_secreto}**\n"
-                f"Você não tem mais tentativas! 😵",
+                            f"verdadeiro **transudo**, mas me enganei!\nO "
+                            f"número secreto era **{numero_secreto}**\n"
+                            f"Você não tem mais tentativas! 😵",
                 color=discord.Color.red(),
             )
 
@@ -886,7 +910,7 @@ async def n(ctx):
         embed_timeout = discord.Embed(
             title="Game Over",
             description=f"☠️ **Tempo esgotado!** ☠️\nO número secreto "
-            f"era **{numero_secreto}**",
+                        f"era **{numero_secreto}**",
             color=discord.Color.red(),
         )
 
@@ -909,12 +933,12 @@ async def setup(ctx):
     embed = discord.Embed(
         title="Central de Atendimento EDP ☎️",
         description="Nesse menu, você pode entrar em contato com a nossa "
-        "equipe de atendimento da Elite!\n\nPara evitar problemas, "
-        "leia as opções com atenção e lembre-se que ao criar um "
-        "Ticket fora do horário abaixo, é provável que demore "
-        "mais para ser atendido.\n\n**Horário de atendimento:**"
-        "\n- Segunda a sexta-feira: 08h às 22h\n- Final de semana"
-        " e feriado: 10h às 20h",
+                    "equipe de atendimento da Elite!\n\nPara evitar problemas, "
+                    "leia as opções com atenção e lembre-se que ao criar um "
+                    "Ticket fora do horário abaixo, é provável que demore "
+                    "mais para ser atendido.\n\n**Horário de atendimento:**"
+                    "\n- Segunda a sexta-feira: 08h às 22h\n- Final de semana"
+                    " e feriado: 10h às 20h",
         color=discord.Color.red(),
     )
 
@@ -1001,7 +1025,7 @@ async def saldo_error(ctx, error):
 @client.command(name="addpikas")
 @commands.has_guild_permissions(administrator=True)
 async def _addpikas(
-    ctx: commands.Context, user: discord.User = None, quantidade: int = None
+        ctx: commands.Context, user: discord.User = None, quantidade: int = None
 ):
     if not user or not quantidade:
         await ctx.send(
@@ -1035,9 +1059,8 @@ async def addpikas_error(ctx, error):
 @client.command(name="removepikas")
 @commands.has_guild_permissions(administrator=True)
 async def _removepikas(
-    ctx: commands.Context, user: discord.User = None, quantidade: int = None
+        ctx: commands.Context, user: discord.User = None, quantidade: int = None
 ):
-
     if not user or not quantidade:
         await ctx.send(
             f"{ctx.author.mention} O comando deve ser usado da seguinte "
@@ -1052,7 +1075,7 @@ async def _removepikas(
         await alterar_saldo(user, -quantidade)
         await ctx.send(
             f"{ctx.author.mention} O valor de **{quantidade} pikas** "
-            ":moneybag: foi removido de **{user.global_name}**"
+            f":moneybag: foi removido de **{user.global_name}**"
         )
 
     else:
@@ -1096,7 +1119,8 @@ async def _daily(ctx):
             await add_cooldown(ctx.author)
         else:
             await ctx.send(
-                msg_semvip, allowed_mentions=discord.AllowedMentions(roles=False)
+                msg_semvip,
+                allowed_mentions=discord.AllowedMentions(roles=False)
             )
 
             await alterar_saldo(ctx.author, valor)
@@ -1104,12 +1128,12 @@ async def _daily(ctx):
     else:
         embed_daily = discord.Embed(
             title="❌ Desculpe, você só pode usar o comando `daily` "
-            "uma vez por dia! :moneybag:",
+                  "uma vez por dia! :moneybag:",
             description=f"\nAinda faltam **{tempo_restante}** :alarm_clock:"
-            f" para coletar o prêmio diário de **pikas** "
-            f"novamente\nEspero você {ctx.author.mention} "
-            f"às `{timestamp}` 💕\n||Compreendo sua "
-            f"necessidade de pegar **pikas**, mas regras são regras 😏||",
+                        f" para coletar o prêmio diário de **pikas** "
+                        f"novamente\nEspero você {ctx.author.mention} "
+                        f"às `{timestamp}` 💕\n||Compreendo sua "
+                        f"necessidade de pegar **pikas**, mas regras são regras 😏||",
             color=discord.Color.from_rgb(255, 255, 255),
         )
 
@@ -1134,10 +1158,49 @@ async def pagamento(ctx, usuario: discord.User, valor: int):
 
 
 @client.command(name="toppikas")
-async def mostrar_rank(ctx, pagina=1):
-    resultado_rank = await criar_rank(pagina, ordenar_por="moedas")
+async def mostrar_rank(ctx, pagina=1, ordenar_por="moedas"):
+    skip = (pagina - 1) * 5
 
-    if not resultado_rank:
+    campo_ordenacao = ordenar_por if ordenar_por in ['moedas', 'vitorias'] else 'moedas'
+
+    membros_servidor = [membro.id for membro in ctx.guild.members]
+
+    pipeline = [
+        {'$match': {'discord_id': {'$in': membros_servidor}}},
+        {'$sort': {campo_ordenacao: -1}},
+        {'$project': {'discord_id': 1, 'moedas': 1, 'vitorias': 1, '_id': 0}},
+        {'$skip': skip},
+        {'$limit': 5}
+    ]
+
+    resultado = usuarios.aggregate(pipeline)
+
+    rank = []
+    posicao = 1 + skip
+
+    for usuario in usuarios.find():
+        discord_id = usuario['discord_id']
+        membro = ctx.guild.get_member(discord_id)
+
+        if membro is None:
+            usuarios.delete_one({'discord_id': discord_id})
+            continue
+
+    for usuario in resultado:
+        discord_id = usuario['discord_id']
+        moedas = usuario['moedas']
+        vitorias = usuario.get('vitorias', 0)
+
+        rank.append({
+            'posicao': posicao,
+            'discord_id': discord_id,
+            'moedas': moedas,
+            'vitorias': vitorias
+        })
+
+        posicao += 1
+
+    if not rank:
         await ctx.send(f"**Não existem membros na página {pagina}!**")
         return
 
@@ -1148,23 +1211,26 @@ async def mostrar_rank(ctx, pagina=1):
     fonte_moedas = ImageFont.truetype("JetBrainsMono-Bold.ttf", 25)
 
     imagem_fundo = Image.open("background.png")
-    imagem_base = Image.new("RGB", (largura_imagem, altura_imagem), (40, 40, 40))
-    imagem_base.paste(imagem_fundo.resize((largura_imagem, altura_imagem)), (0, 0))
+    imagem_base = Image.new("RGB", (largura_imagem, altura_imagem),
+                            (40, 40, 40))
+    imagem_base.paste(imagem_fundo.resize((largura_imagem, altura_imagem)),
+                      (0, 0))
     desenho = ImageDraw.Draw(imagem_base)
 
     y_pos = 40
-    for index, usuario in enumerate(resultado_rank):
+    for index, usuario in enumerate(rank):
         posicao = usuario["posicao"]
         nome = usuario["discord_id"]
         moedas = usuario["moedas"]
-        membro = client.get_user(nome)
+        membro = ctx.guild.get_member(nome)
 
         avatar_url = membro.display_avatar
         avatar = Image.open(BytesIO(requests.get(avatar_url.__str__()).content))
         avatar = avatar.resize((110, 110))
 
         cor_fundo_avatar = (60, 60, 60)
-        desenho.rectangle([10, y_pos, 10 + 110, y_pos + 110], fill=cor_fundo_avatar)
+        desenho.rectangle([10, y_pos, 10 + 110, y_pos + 110],
+                          fill=cor_fundo_avatar)
 
         imagem_base.paste(avatar, (10, y_pos))
 
@@ -1186,7 +1252,8 @@ async def mostrar_rank(ctx, pagina=1):
             fill=cor_destaque,
         )
         desenho.text(
-            (130, y_pos + 50), f"Pikas: {moedas}", font=fonte_moedas, fill=cor_destaque
+            (130, y_pos + 50), f"Pikas: {moedas}", font=fonte_moedas,
+            fill=cor_destaque
         )
         y_pos += 120
 
@@ -1198,10 +1265,49 @@ async def mostrar_rank(ctx, pagina=1):
 
 
 @client.command(name="topvip")
-async def rank_porao(ctx, pagina=1):
-    resultado_rank = await criar_rank(pagina, ordenar_por="vitorias")
+async def rank_porao(ctx, pagina=1, ordenar_por='vitorias'):
+    skip = (pagina - 1) * 5
 
-    if not resultado_rank:
+    campo_ordenacao = ordenar_por if ordenar_por in ['moedas', 'vitorias'] else 'moedas'
+
+    membros_servidor = [membro.id for membro in ctx.guild.members]
+
+    pipeline = [
+        {'$match': {'discord_id': {'$in': membros_servidor}}},
+        {'$sort': {campo_ordenacao: -1}},
+        {'$project': {'discord_id': 1, 'moedas': 1, 'vitorias': 1, '_id': 0}},
+        {'$skip': skip},
+        {'$limit': 5}
+    ]
+
+    resultado = usuarios.aggregate(pipeline)
+
+    rank = []
+    posicao = 1 + skip
+
+    for usuario in usuarios.find():
+        discord_id = usuario['discord_id']
+        membro = ctx.guild.get_member(discord_id)
+
+        if membro is None:
+            usuarios.delete_one({'discord_id': discord_id})
+            continue
+
+    for usuario in resultado:
+        discord_id = usuario['discord_id']
+        moedas = usuario['moedas']
+        vitorias = usuario.get('vitorias', 0)
+
+        rank.append({
+            'posicao': posicao,
+            'discord_id': discord_id,
+            'moedas': moedas,
+            'vitorias': vitorias
+        })
+
+        posicao += 1
+
+    if not rank:
         await ctx.send(f"**Não existem membros na página {pagina}!**")
         return
 
@@ -1212,12 +1318,14 @@ async def rank_porao(ctx, pagina=1):
     fonte_vitorias = ImageFont.truetype("JetBrainsMono-Bold.ttf", 25)
 
     imagem_fundo = Image.open("background.png")
-    imagem_base = Image.new("RGB", (largura_imagem, altura_imagem), (40, 40, 40))
-    imagem_base.paste(imagem_fundo.resize((largura_imagem, altura_imagem)), (0, 0))
+    imagem_base = Image.new("RGB", (largura_imagem, altura_imagem),
+                            (40, 40, 40))
+    imagem_base.paste(imagem_fundo.resize((largura_imagem, altura_imagem)),
+                      (0, 0))
     desenho = ImageDraw.Draw(imagem_base)
 
     y_pos = 40
-    for index, usuario in enumerate(resultado_rank):
+    for index, usuario in enumerate(rank):
         posicao = usuario["posicao"]
         nome = usuario["discord_id"]
         vitorias = usuario["vitorias"]
@@ -1228,7 +1336,8 @@ async def rank_porao(ctx, pagina=1):
         avatar = avatar.resize((110, 110))
 
         cor_fundo_avatar = (60, 60, 60)
-        desenho.rectangle([10, y_pos, 10 + 110, y_pos + 110], fill=cor_fundo_avatar)
+        desenho.rectangle([10, y_pos, 10 + 110, y_pos + 110],
+                          fill=cor_fundo_avatar)
 
         imagem_base.paste(avatar, (10, y_pos))
 
@@ -1290,7 +1399,8 @@ async def saldo_error(ctx, error):
 
 class Punicoes(discord.ui.Select):
     def __init__(
-        self, punicao: str, membro: discord.User, tempo_mute: int, id_user_interaction
+            self, punicao: str, membro: discord.User, tempo_mute: int,
+            id_user_interaction
     ):
         self.msg = {
             "verificacao": "Venda sem verificação",
@@ -1321,7 +1431,8 @@ class Punicoes(discord.ui.Select):
                 label=self.msg["verificacao"],
                 emoji="<a:colorido_sim:1013521308497215651>",
             ),
-            discord.SelectOption(value="idade", label=self.msg["idade"], emoji="🔞"),
+            discord.SelectOption(value="idade", label=self.msg["idade"],
+                                 emoji="🔞"),
             discord.SelectOption(
                 value="privado",
                 label=self.msg["privado"],
@@ -1439,8 +1550,8 @@ class Punicoes(discord.ui.Select):
                         await member.timeout(
                             timedelta(hours=24),
                             reason=f"**O membro {member.display_name} recebeu "
-                            f"{contagem_avisos} avisos e ganhou uma punição"
-                            f" mais severa de 24 horas**",
+                                   f"{contagem_avisos} avisos e ganhou uma punição"
+                                   f" mais severa de 24 horas**",
                         )
                         await member.send(
                             f"⚠️ Você recebeu uma punição do servidor 😈 EDP 😈"
@@ -1463,8 +1574,8 @@ class Punicoes(discord.ui.Select):
                         await member.timeout(
                             timedelta(hours=24),
                             reason=f"O membro {member.display_name} recebeu "
-                            f"{contagem_avisos} e recebeu uma punição mais"
-                            f" severa de 24 horas",
+                                   f"{contagem_avisos} e recebeu uma punição mais"
+                                   f" severa de 24 horas",
                         )
                         await member.send(
                             f"⚠️ Você recebeu uma punição do servidor 😈 EDP 😈"
@@ -1487,8 +1598,8 @@ class Punicoes(discord.ui.Select):
                         await member.timeout(
                             timedelta(hours=24),
                             reason=f"O membro {member.display_name} recebeu"
-                            f" {contagem_avisos} e recebeu uma punição "
-                            f"mais severa de 24 horas",
+                                   f" {contagem_avisos} e recebeu uma punição "
+                                   f"mais severa de 24 horas",
                         )
                         await member.send(
                             f"⚠️ Você recebeu uma punição do servidor 😈 EDP 😈"
@@ -1597,7 +1708,8 @@ class Punicoes(discord.ui.Select):
                             f" um erro."
                         )
             else:
-                await interaction.followup.send("Membro não encontrado", ephemeral=True)
+                await interaction.followup.send("Membro não encontrado",
+                                                ephemeral=True)
         else:
             await interaction.followup.send(
                 f"{interaction.user.display_name} Você não tem permissão para "
@@ -1608,7 +1720,8 @@ class Punicoes(discord.ui.Select):
 
 
 class PunicoesView(discord.ui.View):
-    def __init__(self, punicao: str, membro: discord.User, tempo_mute: int, interacao):
+    def __init__(self, punicao: str, membro: discord.User, tempo_mute: int,
+                 interacao):
         super().__init__(timeout=None)
         self.add_item(
             Punicoes(
@@ -1634,7 +1747,8 @@ async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
             f"{member.display_name}.**\n*Essa mensagem será apagada "
             f"automaticamente em 30 segundos*",
             view=PunicoesView(
-                punicao=punicao, membro=member, tempo_mute=mute, interacao=id_author
+                punicao=punicao, membro=member, tempo_mute=mute,
+                interacao=id_author
             ),
             delete_after=30,
         )
@@ -1648,7 +1762,8 @@ async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
             f"{member.display_name}.**\n*Essa mensagem será apagada "
             f"automaticamente em 30 segundos*",
             view=PunicoesView(
-                punicao=punicao, membro=member, tempo_mute=mute, interacao=id_author
+                punicao=punicao, membro=member, tempo_mute=mute,
+                interacao=id_author
             ),
             delete_after=30,
         )
@@ -1662,7 +1777,8 @@ async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
             f"{member.display_name}.**\n*Essa mensagem será apagada "
             f"automaticamente em 30 segundos*",
             view=PunicoesView(
-                punicao=punicao, membro=member, tempo_mute=mute, interacao=id_author
+                punicao=punicao, membro=member, tempo_mute=mute,
+                interacao=id_author
             ),
             delete_after=30,
         )
@@ -1678,7 +1794,8 @@ async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
                 f"{member.display_name}.**\n*Essa mensagem será apagada "
                 f"automaticamente em 30 segundos*",
                 view=PunicoesView(
-                    punicao=punicao, membro=member, tempo_mute=mute, interacao=id_author
+                    punicao=punicao, membro=member, tempo_mute=mute,
+                    interacao=id_author
                 ),
                 delete_after=30,
             )
@@ -1692,7 +1809,8 @@ async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
                 f"minutos em {member.display_name}.**\n*Essa mensagem será"
                 f" apagada automaticamente em 30 segundos*",
                 view=PunicoesView(
-                    punicao=punicao, membro=member, tempo_mute=mute, interacao=id_author
+                    punicao=punicao, membro=member, tempo_mute=mute,
+                    interacao=id_author
                 ),
                 delete_after=30,
             )
@@ -1706,7 +1824,8 @@ async def _punicao(ctx, punicao: str, member: discord.User, mute: int = None):
                 f"{member.display_name}.**\n*Essa mensagem será apagada "
                 f"automaticamente em 30 segundos*",
                 view=PunicoesView(
-                    punicao=punicao, membro=member, tempo_mute=mute, interacao=id_author
+                    punicao=punicao, membro=member, tempo_mute=mute,
+                    interacao=id_author
                 ),
                 delete_after=30,
             )
@@ -1769,10 +1888,12 @@ async def _unmute(ctx, member: discord.Member):
     if mutado:
         await member.edit(timed_out_until=None)
         await asyncio.sleep(1)
-        await canal.send(f"**A punição mute foi removida de {member.display_name}**")
+        await canal.send(
+            f"**A punição mute foi removida de {member.display_name}**")
         await member.send("Sua punição de **mute** foi removida!")
     else:
-        await canal.send(f"Oppss! parece que o {member.display_name} não está mutado!")
+        await canal.send(
+            f"Oppss! parece que o {member.display_name} não está mutado!")
 
 
 @_unmute.error
@@ -1855,8 +1976,8 @@ async def __avatar(ctx, member: discord.Member = None):
     embed.set_image(url=member.avatar.url)
     embed.set_footer(
         text=f"🕵️‍♂️ Após uma investigação profunda, descobri que\n "
-        f"{member.display_name} é esse coiso acima.\nVamos "
-        f"{ctx.author}, não se misture com essa gentalha!"
+             f"{member.display_name} é esse coiso acima.\nVamos "
+             f"{ctx.author}, não se misture com essa gentalha!"
     )
 
     await ctx.send(embed=embed)
@@ -1879,6 +2000,56 @@ async def addavatar(ctx, error):
             f"Olá {ctx.author.mention}, por favor envie o avatar "
             f"que deseja usar!"
         )
+
+
+@client.command(name='clear')
+@commands.has_guild_permissions(manage_messages=True)
+async def _purgemsg(ctx, value: commands.Range[int, 2, 1000]):
+    gmt = pytz.timezone('America/Sao_Paulo')
+    now = datetime.datetime.now(tz=gmt)
+    log_channel = client.get_channel(983234083918344222)
+
+    fourteendays = now - timedelta(days=14)
+
+    messages = [message async for message in
+                ctx.channel.history(limit=value,
+                                    after=fourteendays,
+                                    oldest_first=False)
+                ]
+
+    messages_ignored = [message async for message in
+                        ctx.channel.history(limit=value,
+                                            before=now,
+                                            oldest_first=False)
+                        ]
+
+    await ctx.channel.delete_messages(messages)
+
+    result = len(messages_ignored) - len(messages)
+    msg = (
+              f'**✅ Foram apagadas {len(messages)} mensagem(s).**\n\n'
+              if len(messages) > 0 else ''
+          ) + (
+              f'**{result} mensagem(s)** não foram apagadas devido a '
+              f'limitações do Discord\n`mais antigas que 14 dias`\n'
+              if result != 0 else ''
+          )
+
+    embed = discord.Embed(description=f'{msg}Clear feito em <#{ctx.channel.id}>'
+                                      f' por: {ctx.author.mention}')
+
+    await log_channel.send(embed=embed,
+                   allowed_mentions=discord.AllowedMentions(users=False)
+                   )
+
+
+@_purgemsg.error
+async def msg_error(ctx, error):
+    if isinstance(error, commands.RangeError):
+        await ctx.send(f'Olá {ctx.author.mention} insira um numero de '
+                       f'mensagens válido para apagar `2 a 1000`')
+    elif isinstance(error, commands.MissingPermissions):
+        return
 
 
 client.run(os.getenv("TOKEN_BOT"))
